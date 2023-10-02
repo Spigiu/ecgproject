@@ -10,6 +10,7 @@ class Series(Dataset):
         self.t_len = ts.size(dim=2)
         self.n_labels = len(labels)
         self.transform = get_transform(opt)
+       
 
     def __len__(self):
         return len(self.ts)
@@ -17,3 +18,7 @@ class Series(Dataset):
     def __getitem__(self, index):
         return self.transform(self.ts[index, :, :]), self.labels[index]
 
+    
+
+        
+        
