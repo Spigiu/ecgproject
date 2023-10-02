@@ -47,4 +47,23 @@ class RandomScaling(torch.nn.Module):
             data[selection,:]= factor * data_to_amplify
             return data 
         return data 
+
+class RandomBiasShift(torch.nn.Module):
+    def __init__(self,p=0.5, lb=0.01, hb=0.1,f=1,):
+        super(RandomBiasShift,self).__init()
+        self.p=p
+        self.f=f
+        self.lb=lb
+        self.hb=hb
+    def forward(seld, data):
+        if torch.rand(1) < self.p:
+            n_ts=len(data)
+            selection=np.random.choice(n_ts,self.f,replace=False)
+            data_to_shift= data[selection, :]  
+            bias= (self.hb-self.lb)*np.random.random_sample() + self.lb
+            data[selection,:]=bias + data_to_shift
+            return data 
+        return data 
+
+     
         

@@ -5,19 +5,19 @@ import torch
 from scipy.io import loadmat, savemat
 
 
-def assemble_data():
+def assemble_data(labels_to_pick = {'NSR': 1, 'FA': 2, 'TACHY': 3, 'BRADY': 4}):
     datamat = os.path.join(os.path.dirname(__file__), 'dataset.mat')
     if os.path.isfile(datamat):
         print(f"Dataset already assembled in {os.path.dirname(__file__)}.")
     else:
-        labels_to_pick = {'N': 0, 'A': 1}
+       
         data = []
         labels = []
 
-        with open(os.path.join(os.path.dirname(__file__), 'Data', 'elenco.txt'), 'r') as file:
-            csv_reader = csv.reader(file)
+        with open(os.path.join(os.path.dirname(__file__), 'Data', 'FILEE.txt'), 'r') as file:
+            csv_reader = csv.reader(file, delimiter=';')
             for row in csv_reader:
-                print(row)
+                #print(row)
                 if row[1] in labels_to_pick.keys():
                     with open(os.path.join(os.path.dirname(__file__), 'Data', row[0]), 'r') as datafile:
                         data_reader=csv.reader(datafile)
