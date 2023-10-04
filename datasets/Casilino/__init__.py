@@ -5,7 +5,7 @@ import torch
 from scipy.io import loadmat, savemat
 
 
-def assemble_data(labels_to_pick = {'NSR': 1, 'FA': 2, 'TACHY': 3, 'BRADY': 4}):
+def assemble_data(labels_to_pick = {'NSR': 0, 'FA': 1, 'TACHY': 2, 'BRADY': 3}):
     datamat = os.path.join(os.path.dirname(__file__), 'dataset.mat')
     if os.path.isfile(datamat):
         print(f"Dataset already assembled in {os.path.dirname(__file__)}.")
@@ -14,8 +14,8 @@ def assemble_data(labels_to_pick = {'NSR': 1, 'FA': 2, 'TACHY': 3, 'BRADY': 4}):
         data = []
         labels = []
 
-        with open(os.path.join(os.path.dirname(__file__), 'Data', 'FILEE.txt'), 'r') as file:
-            csv_reader = csv.reader(file, delimiter=';')
+        with open(os.path.join(os.path.dirname(__file__), 'Data', 'FILEE.csv'), 'r') as file:
+            csv_reader = csv.reader(file, delimiter= ',')
             for row in csv_reader:
                 #print(row)
                 if row[1] in labels_to_pick.keys():

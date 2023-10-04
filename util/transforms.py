@@ -49,13 +49,13 @@ class RandomScaling(torch.nn.Module):
         return data 
 
 class RandomBiasShift(torch.nn.Module):
-    def __init__(self,p=0.5, lb=0.01, hb=0.1,f=1,):
-        super(RandomBiasShift,self).__init()
+    def __init__(self,p=0.5, lb=0.01, hb=0.1,f=1):
+        super(RandomBiasShift,self).__init__()
         self.p=p
         self.f=f
         self.lb=lb
         self.hb=hb
-    def forward(seld, data):
+    def forward(self, data):
         if torch.rand(1) < self.p:
             n_ts=len(data)
             selection=np.random.choice(n_ts,self.f,replace=False)
@@ -65,5 +65,33 @@ class RandomBiasShift(torch.nn.Module):
             return data 
         return data 
 
-     
+
+class RandomOscillationAdd(torch.nn.Module):
+    def __init__(self,p=0.5,freq=0.5,lp=0.1,hp=2*np.pi,amplitude=0.05,f_sample=250,f=1):
+        super(RandomOscillationAdd,self).__init__()
+        self.p=p
+        self.f=f
+        self.freq=freq
+        self.hp=hp
+        self.lp=lp
+        self.amplitude=amplitude
+        self.f_sample=f_sample
+    def forward(self, data):
+        if torch.rand(1) < self.p:
+            n_ts=len(data)
+            selection=np.random.choice(n_ts,self.f,replace=False)
+            data_to_add= data[selection, :]  
+            phase = (self.hp-self.lp)*np.random.random_sample() + self.lp
+            t=np.linspace(0,data.shape[1]/self.f_sample,data.shape[1])
+            oscillation= self.amplitude* torch.sin(2*np.pi*self.freq*torch.from_numpy(t) + phase) 
+            oscillating_data=oscillation+data_to_add    
+            data[selection,:]=oscillating_data.float()
+            return data 
+        return data 
+
+    
+    
+    
+    
+    
         
